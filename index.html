@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A highly animated, responsive login and signup application with glassmorphic cards, moving ambient backgrounds, floating input labels, and dark/light modes.">
+  <title>Portal - Dynamic Authentication</title>
+  
+  <!-- Modern Typography (Outfit Font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <!-- Ambient Moving Background Blobs -->
+  <div class="bg-ambiance">
+    <div class="blob blob-1" id="blob1"></div>
+    <div class="blob blob-2" id="blob2"></div>
+    <div class="blob blob-3" id="blob3"></div>
+  </div>
+
+  <!-- Theme Toggle Option -->
+  <div class="theme-toggle-wrapper">
+    <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle visual theme" title="Toggle Theme">
+      <i data-lucide="sun" class="icon-sun"></i>
+      <i data-lucide="moon" class="icon-moon"></i>
+    </button>
+  </div>
+
+  <!-- Primary Container -->
+  <main class="main-container">
+    <div class="auth-card" id="authCard">
+      <!-- Form Toggle Switch -->
+      <div class="toggle-tabs">
+        <div class="tab-slider" id="tabSlider"></div>
+        <button class="tab-btn active" id="tabSignIn" type="button">Sign In</button>
+        <button class="tab-btn" id="tabSignUp" type="button">Sign Up</button>
+      </div>
+
+      <!-- Sign In Form Container -->
+      <div class="form-wrapper active" id="signInWrapper">
+        <div class="header-section">
+          <h1 class="auth-title">Welcome back</h1>
+          <p class="auth-subtitle">Enter your credentials to access your workspace.</p>
+        </div>
+        
+        <form class="auth-form" id="signInForm" novalidate>
+          <!-- Email Field -->
+          <div class="input-group">
+            <div class="input-field-container">
+              <i data-lucide="mail" class="input-icon"></i>
+              <input type="email" id="signInEmail" name="email" required autocomplete="email" placeholder=" ">
+              <label for="signInEmail" class="floating-label">Email Address</label>
+            </div>
+            <span class="error-msg" id="signInEmailError"></span>
+          </div>
+
+          <!-- Password Field -->
+          <div class="input-group">
+            <div class="input-field-container">
+              <i data-lucide="lock" class="input-icon"></i>
+              <input type="password" id="signInPassword" name="password" required autocomplete="current-password" placeholder=" ">
+              <label for="signInPassword" class="floating-label">Password</label>
+              <button type="button" class="password-toggle" id="signInPasswordToggle" aria-label="Toggle password visibility">
+                <i data-lucide="eye" class="toggle-icon-eye"></i>
+                <i data-lucide="eye-off" class="toggle-icon-eyeoff hidden"></i>
+              </button>
+            </div>
+            <span class="error-msg" id="signInPasswordError"></span>
+          </div>
+
+          <!-- Extra Utilities (Remember Me / Forgot Password) -->
+          <div class="form-utilities">
+            <label class="checkbox-container">
+              <input type="checkbox" id="signInRemember">
+              <span class="checkbox-checkmark"></span>
+              <span class="checkbox-label">Keep me signed in</span>
+            </label>
+            <a href="#" class="forgot-password-link" id="forgotPasswordLink">Forgot Password?</a>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="submit-btn" id="signInSubmitBtn">
+            <span class="btn-text">Access Portal</span>
+            <div class="btn-spinner hidden"></div>
+            <i data-lucide="arrow-right" class="btn-arrow"></i>
+            <i data-lucide="check" class="btn-check-icon hidden"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- Sign Up Form Container -->
+      <div class="form-wrapper" id="signUpWrapper">
+        <div class="header-section">
+          <h2 class="auth-title">Create Account</h2>
+          <p class="auth-subtitle">Join us to start managing your dynamic workspace.</p>
+        </div>
+        
+        <form class="auth-form" id="signUpForm" novalidate>
+          <!-- Full Name -->
+          <div class="input-group">
+            <div class="input-field-container">
+              <i data-lucide="user" class="input-icon"></i>
+              <input type="text" id="signUpName" name="username" required autocomplete="name" placeholder=" ">
+              <label for="signUpName" class="floating-label">Full Name</label>
+            </div>
+            <span class="error-msg" id="signUpNameError"></span>
+          </div>
+
+          <!-- Email Address -->
+          <div class="input-group">
+            <div class="input-field-container">
+              <i data-lucide="mail" class="input-icon"></i>
+              <input type="email" id="signUpEmail" name="email" required autocomplete="email" placeholder=" ">
+              <label for="signUpEmail" class="floating-label">Email Address</label>
+            </div>
+            <span class="error-msg" id="signUpEmailError"></span>
+          </div>
+
+          <!-- Password -->
+          <div class="input-group">
+            <div class="input-field-container">
+              <i data-lucide="lock" class="input-icon"></i>
+              <input type="password" id="signUpPassword" name="password" required autocomplete="new-password" placeholder=" ">
+              <label for="signUpPassword" class="floating-label">Password</label>
+              <button type="button" class="password-toggle" id="signUpPasswordToggle" aria-label="Toggle password visibility">
+                <i data-lucide="eye" class="toggle-icon-eye"></i>
+                <i data-lucide="eye-off" class="toggle-icon-eyeoff hidden"></i>
+              </button>
+            </div>
+            <span class="error-msg" id="signUpPasswordError"></span>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="input-group">
+            <div class="input-field-container">
+              <i data-lucide="lock-keyhole" class="input-icon"></i>
+              <input type="password" id="signUpConfirmPassword" name="confirmPassword" required autocomplete="new-password" placeholder=" ">
+              <label for="signUpConfirmPassword" class="floating-label">Confirm Password</label>
+              <button type="button" class="password-toggle" id="signUpConfirmPasswordToggle" aria-label="Toggle password visibility">
+                <i data-lucide="eye" class="toggle-icon-eye"></i>
+                <i data-lucide="eye-off" class="toggle-icon-eyeoff hidden"></i>
+              </button>
+            </div>
+            <span class="error-msg" id="signUpConfirmPasswordError"></span>
+          </div>
+
+          <!-- Terms and Conditions -->
+          <div class="form-utilities">
+            <label class="checkbox-container">
+              <input type="checkbox" id="signUpTerms" required>
+              <span class="checkbox-checkmark"></span>
+              <span class="checkbox-label">I agree to the <a href="#" class="terms-link">Terms of Service</a> &amp; <a href="#" class="terms-link">Privacy Policy</a></span>
+            </label>
+          </div>
+          <span class="error-msg text-center" id="signUpTermsError"></span>
+
+          <!-- Submit Button -->
+          <button type="submit" class="submit-btn" id="signUpSubmitBtn">
+            <span class="btn-text">Register Account</span>
+            <div class="btn-spinner hidden"></div>
+            <i data-lucide="arrow-right" class="btn-arrow"></i>
+            <i data-lucide="check" class="btn-check-icon hidden"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notification System -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- JavaScript Behavior -->
+  <script src="script.js"></script>
+</body>
+</html>
