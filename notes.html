@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage your notes within a secure glassmorphic workspace featuring dynamic search, categorization, sorting, and session handling.">
+  <title>Portal Notes - Dynamic Workspace</title>
+  
+  <!-- Session Guard Check (Executes immediately to prevent flash of protected content) -->
+  <script>
+    if (localStorage.getItem('authenticated') !== 'true') {
+      window.location.replace('index.html');
+    }
+  </script>
+  
+  <!-- Modern Typography (Outfit Font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Notes Specific Stylesheet -->
+  <link rel="stylesheet" href="notes.css">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <!-- Ambient Moving Background Blobs (Matches main page design system) -->
+  <div class="bg-ambiance">
+    <div class="blob blob-1" id="blob1"></div>
+    <div class="blob blob-2" id="blob2"></div>
+    <div class="blob blob-3" id="blob3"></div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="workspace-header">
+    <div class="header-logo">
+      <div class="logo-icon-box">
+        <i data-lucide="edit-3" class="logo-icon"></i>
+      </div>
+      <div class="logo-text">
+        <h1 class="logo-title">Portal</h1>
+        <span class="logo-tag">Notes Workspace</span>
+      </div>
+    </div>
+    
+    <div class="header-actions">
+      <span class="user-greeting" id="userGreeting">Welcome back, User</span>
+      
+      <!-- Shared Visual Theme Toggle -->
+      <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle visual theme" title="Toggle Theme">
+        <i data-lucide="sun" class="icon-sun"></i>
+        <i data-lucide="moon" class="icon-moon"></i>
+      </button>
+      
+      <!-- Session Terminate Button -->
+      <button class="logout-btn" id="logoutBtn" title="Logout session">
+        <i data-lucide="log-out"></i>
+        <span class="logout-text">Sign Out</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Primary Workspace Content -->
+  <main class="workspace-container">
+    <!-- Sidebar Panel: Operations & Note Constructor -->
+    <section class="workspace-sidebar">
+      <!-- Search & Sorting Controls -->
+      <div class="sidebar-card filter-card">
+        <h2 class="card-heading">Workspace Search</h2>
+        
+        <!-- Search bar -->
+        <div class="search-box">
+          <i data-lucide="search" class="search-icon"></i>
+          <input type="text" id="noteSearch" placeholder="Search title or content..." aria-label="Search notes">
+        </div>
+        
+        <!-- Category Pill Filter Section -->
+        <div class="category-filter-section">
+          <span class="section-label">Category Filters</span>
+          <div class="category-pills" id="categoryPills">
+            <button class="pill-btn active" data-category="all">All</button>
+            <button class="pill-btn" data-category="personal">Personal</button>
+            <button class="pill-btn" data-category="work">Work</button>
+            <button class="pill-btn" data-category="ideas">Ideas</button>
+            <button class="pill-btn" data-category="urgent">Urgent</button>
+          </div>
+        </div>
+
+        <!-- Sorting dropdown menu -->
+        <div class="sort-section">
+          <label for="noteSort" class="section-label">Sort Order</label>
+          <div class="sort-select-wrapper">
+            <i data-lucide="sliders-horizontal" class="sort-icon"></i>
+            <select id="noteSort" aria-label="Sort notes">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="alphabetical">Alphabetical</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note Constructor Form -->
+      <div class="sidebar-card note-form-card" id="noteFormCard">
+        <h2 class="card-heading" id="formHeading">New Note</h2>
+        
+        <form id="noteForm" novalidate>
+          <input type="hidden" id="editNoteId" value="">
+          
+          <!-- Note Title -->
+          <div class="input-group">
+            <div class="input-field-container">
+              <input type="text" id="noteTitle" required placeholder=" " autocomplete="off">
+              <label for="noteTitle" class="floating-label">Note Title</label>
+            </div>
+            <span class="error-msg" id="noteTitleError"></span>
+          </div>
+          
+          <!-- Category Grid Select -->
+          <div class="category-selector-group">
+            <span class="field-label">Category Tag</span>
+            <div class="category-selector-grid">
+              <label class="category-selector-option select-personal">
+                <input type="radio" name="noteCategory" value="personal" checked>
+                <span class="selector-badge">Personal</span>
+              </label>
+              <label class="category-selector-option select-work">
+                <input type="radio" name="noteCategory" value="work">
+                <span class="selector-badge">Work</span>
+              </label>
+              <label class="category-selector-option select-ideas">
+                <input type="radio" name="noteCategory" value="ideas">
+                <span class="selector-badge">Ideas</span>
+              </label>
+              <label class="category-selector-option select-urgent">
+                <input type="radio" name="noteCategory" value="urgent">
+                <span class="selector-badge">Urgent</span>
+              </label>
+            </div>
+          </div>
+          
+          <!-- Note Description Body -->
+          <div class="input-group">
+            <div class="input-field-container textarea-container">
+              <textarea id="noteContent" required placeholder=" " rows="4"></textarea>
+              <label for="noteContent" class="floating-label">Note Content</label>
+            </div>
+            <span class="error-msg" id="noteContentError"></span>
+          </div>
+          
+          <!-- Constructor Actions -->
+          <div class="form-actions">
+            <button type="button" class="cancel-edit-btn hidden" id="cancelEditBtn">
+              Cancel
+            </button>
+            <button type="submit" class="submit-btn" id="noteSubmitBtn">
+              <span class="btn-text">Save Note</span>
+              <i data-lucide="plus-circle" class="btn-arrow" id="submitBtnIcon"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Notes Display Board Grid -->
+    <section class="workspace-board">
+      <div class="board-header">
+        <h2 class="board-title">My Notes</h2>
+        <span class="notes-count" id="notesCount">0 notes loaded</span>
+      </div>
+      
+      <!-- Grid Grid Container -->
+      <div class="notes-grid" id="notesGrid">
+        <!-- Notes cards will be dynamically loaded here by notes.js -->
+      </div>
+      
+      <!-- Glassmorphic Empty State Workspace Prompt -->
+      <div class="board-empty-state hidden" id="boardEmptyState">
+        <div class="empty-icon-box">
+          <i data-lucide="clipboard" class="empty-icon"></i>
+        </div>
+        <h3 class="empty-title">Your workspace is empty</h3>
+        <p class="empty-desc">Create your first note in the sidebar or check your active category and search filters.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Interactive Toast Notification System -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Workspace Logic Script -->
+  <script src="notes.js"></script>
+</body>
+</html>

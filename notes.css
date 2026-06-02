@@ -1,0 +1,1238 @@
+/* ----------------------------------------------------
+   1. DESIGN SYSTEM & VARIABLE SYSTEM (Synchronized with style.css)
+   ---------------------------------------------------- */
+:root {
+  /* HSL Color Definitions - Dark Theme (Default) */
+  --hue: 250;
+  --bg-primary-hsl: var(--hue), 24%, 6%;
+  --bg-secondary-hsl: var(--hue), 24%, 10%;
+  
+  --bg-primary: hsl(var(--bg-primary-hsl));
+  --bg-secondary: hsl(var(--bg-secondary-hsl));
+  
+  --text-primary: hsl(var(--hue), 15%, 95%);
+  --text-secondary: hsl(var(--hue), 10%, 65%);
+  
+  --accent-primary-hsl: 260, 95%, 68%;
+  --accent-secondary-hsl: 290, 95%, 65%;
+  --accent-primary: hsl(var(--accent-primary-hsl));
+  --accent-secondary: hsl(var(--accent-secondary-hsl));
+  --accent-glow: hsla(var(--accent-primary-hsl), 0.4);
+  
+  /* Glassmorphism Variables */
+  --glass-bg: hsla(var(--hue), 20%, 10%, 0.45);
+  --glass-border: hsla(var(--hue), 15%, 25%, 0.35);
+  --glass-glow: hsla(var(--accent-primary-hsl), 0.08);
+  
+  /* Fields & Inputs */
+  --input-bg: hsla(var(--hue), 20%, 8%, 0.5);
+  --input-border: hsla(var(--hue), 12%, 22%, 0.8);
+  --input-focus: hsl(var(--accent-primary-hsl));
+  --input-focus-glow: hsla(var(--accent-primary-hsl), 0.15);
+  
+  /* Status Colors */
+  --success: hsl(145, 80%, 45%);
+  --error: hsl(355, 85%, 60%);
+  --error-bg: hsla(355, 85%, 60%, 0.08);
+  --error-glow: hsla(355, 85%, 60%, 0.2);
+  
+  /* Note Category Colors */
+  --cat-personal: hsl(265, 85%, 65%);
+  --cat-work: hsl(195, 90%, 55%);
+  --cat-ideas: hsl(150, 75%, 45%);
+  --cat-urgent: hsl(355, 85%, 60%);
+  
+  --cat-personal-bg: hsla(265, 85%, 65%, 0.12);
+  --cat-work-bg: hsla(195, 90%, 55%, 0.12);
+  --cat-ideas-bg: hsla(150, 75%, 45%, 0.12);
+  --cat-urgent-bg: hsla(355, 85%, 60%, 0.12);
+  
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --transition-smooth: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-snappy: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Light Theme Overrides */
+html[data-theme="light"] {
+  --bg-primary-hsl: var(--hue), 24%, 96%;
+  --bg-secondary-hsl: var(--hue), 20%, 92%;
+  
+  --text-primary: hsl(var(--hue), 25%, 12%);
+  --text-secondary: hsl(var(--hue), 15%, 45%);
+  
+  --accent-primary-hsl: 255, 85%, 58%;
+  --accent-secondary-hsl: 285, 85%, 55%;
+  --accent-primary: hsl(var(--accent-primary-hsl));
+  --accent-secondary: hsl(var(--accent-secondary-hsl));
+  --accent-glow: hsla(var(--accent-primary-hsl), 0.25);
+  
+  /* Glassmorphism Variables */
+  --glass-bg: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-glow: hsla(var(--accent-primary-hsl), 0.04);
+  
+  /* Fields & Inputs */
+  --input-bg: rgba(255, 255, 255, 0.7);
+  --input-border: hsl(var(--hue), 15%, 82%);
+  --input-focus: hsl(var(--accent-primary-hsl));
+  --input-focus-glow: hsla(var(--accent-primary-hsl), 0.1);
+  
+  /* Category Colors Light Modifiers */
+  --cat-personal: hsl(265, 75%, 55%);
+  --cat-work: hsl(195, 85%, 45%);
+  --cat-ideas: hsl(150, 75%, 38%);
+  --cat-urgent: hsl(355, 75%, 50%);
+  
+  --cat-personal-bg: hsla(265, 75%, 55%, 0.1);
+  --cat-work-bg: hsla(195, 85%, 45%, 0.1);
+  --cat-ideas-bg: hsla(150, 75%, 38%, 0.1);
+  --cat-urgent-bg: hsla(355, 75%, 50%, 0.1);
+  
+  --shadow-color: rgba(0, 0, 0, 0.08);
+}
+
+/* ----------------------------------------------------
+   2. GENERAL RESET & BASE STYLES
+   ---------------------------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Outfit', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  transition: background-color var(--transition-smooth), color var(--transition-smooth);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ----------------------------------------------------
+   3. AMBIENT BACKGROUND ANIMATION
+   ---------------------------------------------------- */
+.bg-ambiance {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(100px);
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  opacity: 0.65;
+  transition: all var(--transition-smooth);
+}
+
+html[data-theme="light"] .blob {
+  mix-blend-mode: multiply;
+  opacity: 0.25;
+}
+
+.blob-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, hsla(var(--accent-primary-hsl), 0.8) 0%, rgba(0,0,0,0) 70%);
+  top: -10%;
+  left: -10%;
+  animation: float-blob-1 25s infinite alternate ease-in-out;
+}
+
+.blob-2 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, hsla(var(--accent-secondary-hsl), 0.7) 0%, rgba(0,0,0,0) 70%);
+  bottom: -15%;
+  right: -10%;
+  animation: float-blob-2 30s infinite alternate ease-in-out;
+}
+
+.blob-3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, hsla(180, 85%, 60%, 0.5) 0%, rgba(0,0,0,0) 70%);
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: float-blob-3 20s infinite alternate ease-in-out;
+}
+
+@keyframes float-blob-1 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(120px, 80px) scale(1.15); }
+  100% { transform: translate(40px, 150px) scale(0.9); }
+}
+
+@keyframes float-blob-2 {
+  0% { transform: translate(0, 0) scale(0.9); }
+  50% { transform: translate(-100px, -120px) scale(1.1); }
+  100% { transform: translate(-40px, -40px) scale(1); }
+}
+
+@keyframes float-blob-3 {
+  0% { transform: translate(-50%, -50%) translate(-60px, 60px) scale(1.1); }
+  50% { transform: translate(-50%, -50%) translate(100px, -60px) scale(0.9); }
+  100% { transform: translate(-50%, -50%) translate(-40px, -40px) scale(1.05); }
+}
+
+/* ----------------------------------------------------
+   4. NAVIGATION HEADER
+   ---------------------------------------------------- */
+.workspace-header {
+  background: var(--glass-bg);
+  border-bottom: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px) saturate(160%);
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  transition: background-color var(--transition-smooth), border-color var(--transition-smooth);
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon-box {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.logo-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo-tag {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-greeting {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Theme Toggle inside Header */
+.header-actions .theme-toggle-btn {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-primary);
+  position: relative;
+  transition: transform var(--transition-snappy), border-color var(--transition-smooth), background-color var(--transition-smooth);
+}
+
+.header-actions .theme-toggle-btn:hover {
+  transform: scale(1.05);
+  border-color: var(--input-focus);
+}
+
+.header-actions .theme-toggle-btn i {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity var(--transition-snappy);
+}
+
+html[data-theme="dark"] .icon-sun { transform: rotate(45deg) scale(0); opacity: 0; }
+html[data-theme="dark"] .icon-moon { transform: rotate(0) scale(1); opacity: 1; }
+html[data-theme="light"] .icon-sun { transform: rotate(0) scale(1); opacity: 1; }
+html[data-theme="light"] .icon-moon { transform: rotate(-45deg) scale(0); opacity: 0; }
+
+/* Logout Button */
+.logout-btn {
+  background: hsla(355, 85%, 60%, 0.1);
+  border: 1px solid hsla(355, 85%, 60%, 0.25);
+  color: var(--error);
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color var(--transition-smooth), border-color var(--transition-smooth), transform var(--transition-snappy);
+}
+
+.logout-btn:hover {
+  background: var(--error);
+  border-color: var(--error);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.2);
+}
+
+.logout-btn:active {
+  transform: translateY(1px);
+}
+
+.logout-btn i {
+  width: 16px;
+  height: 16px;
+}
+
+/* ----------------------------------------------------
+   5. WORKSPACE CONTAINERS
+   ---------------------------------------------------- */
+.workspace-container {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 30px;
+  padding: 30px 40px;
+  max-width: 1600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 5;
+  min-height: calc(100vh - 80px);
+}
+
+.workspace-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.workspace-board {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Sidebar Cards Base */
+.sidebar-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 24px;
+  backdrop-filter: blur(20px) saturate(160%);
+  box-shadow: 0 8px 32px var(--shadow-color);
+  transition: border-color var(--transition-smooth), background-color var(--transition-smooth);
+  position: relative;
+}
+
+/* Dynamic border lighting for Cards in Dark Mode */
+html[data-theme="dark"] .sidebar-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 20px;
+  padding: 1.5px;
+  background: linear-gradient(135deg, hsla(var(--accent-primary-hsl), 0.15), rgba(255, 255, 255, 0.02) 40%, rgba(255, 255, 255, 0.05) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.card-heading {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ----------------------------------------------------
+   6. FILTER & SEARCH COMPONENT STYLING
+   ---------------------------------------------------- */
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  padding: 14px 16px 14px 44px;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition-snappy), box-shadow var(--transition-snappy);
+}
+
+.search-box input:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 4px var(--input-focus-glow);
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-secondary);
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  transition: color var(--transition-snappy);
+}
+
+.search-box input:focus ~ .search-icon {
+  color: var(--input-focus);
+}
+
+/* Category Filter Pills */
+.category-filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.section-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.category-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill-btn {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all var(--transition-snappy);
+}
+
+.pill-btn:hover {
+  border-color: var(--input-focus);
+  color: var(--text-primary);
+}
+
+.pill-btn.active {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+/* Sorting Selection Container */
+.sort-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sort-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sort-select-wrapper select {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  padding: 12px 16px 12px 42px;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  transition: border-color var(--transition-snappy), box-shadow var(--transition-snappy);
+}
+
+.sort-select-wrapper select:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 4px var(--input-focus-glow);
+}
+
+.sort-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-secondary);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+/* Dropdown arrow custom design */
+.sort-select-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  width: 6px;
+  height: 6px;
+  border: solid var(--text-secondary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+/* ----------------------------------------------------
+   7. FORM CONSTRUCTOR & CUSTOM INPUTS
+   ---------------------------------------------------- */
+.note-form-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.input-field-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-field-container input,
+.input-field-container textarea {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition-snappy), box-shadow var(--transition-snappy);
+}
+
+.input-field-container textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.floating-label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  pointer-events: none;
+  transition: transform var(--transition-snappy), font-size var(--transition-snappy), color var(--transition-snappy), background-color var(--transition-smooth), padding var(--transition-snappy);
+}
+
+.textarea-container .floating-label {
+  top: 20px;
+  transform: none;
+}
+
+.input-field-container input:focus,
+.input-field-container input:not(:placeholder-shown),
+.input-field-container textarea:focus,
+.input-field-container textarea:not(:placeholder-shown) {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 4px var(--input-focus-glow);
+}
+
+.input-field-container input:focus ~ .floating-label,
+.input-field-container input:not(:placeholder-shown) ~ .floating-label {
+  transform: translateY(-140%) scale(0.8);
+  transform-origin: left top;
+  color: var(--input-focus);
+  padding: 0 4px;
+}
+
+.input-field-container textarea:focus ~ .floating-label,
+.input-field-container textarea:not(:placeholder-shown) ~ .floating-label {
+  transform: translateY(-135px) scale(0.8);
+  transform-origin: left top;
+  color: var(--input-focus);
+  padding: 0 4px;
+}
+
+/* Category Grid Radio Button Selectors */
+.category-selector-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.field-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.category-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.category-selector-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.category-selector-option input {
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+}
+
+.selector-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-secondary);
+  text-align: center;
+  transition: all var(--transition-snappy);
+}
+
+.category-selector-option:hover .selector-badge {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+/* Color Accent Variables for Categories Selector Active States */
+.select-personal input:checked ~ .selector-badge {
+  background: var(--cat-personal-bg);
+  border-color: var(--cat-personal);
+  color: var(--cat-personal);
+}
+
+.select-work input:checked ~ .selector-badge {
+  background: var(--cat-work-bg);
+  border-color: var(--cat-work);
+  color: var(--cat-work);
+}
+
+.select-ideas input:checked ~ .selector-badge {
+  background: var(--cat-ideas-bg);
+  border-color: var(--cat-ideas);
+  color: var(--cat-ideas);
+}
+
+.select-urgent input:checked ~ .selector-badge {
+  background: var(--cat-urgent-bg);
+  border-color: var(--cat-urgent);
+  color: var(--cat-urgent);
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.cancel-edit-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--input-border);
+  color: var(--text-primary);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-snappy);
+}
+
+.cancel-edit-btn:hover {
+  background: hsla(var(--hue), 10%, 50%, 0.1);
+  border-color: var(--text-secondary);
+}
+
+/* Dynamic Add Button (Matches style.css Submit Style) */
+.note-form-card .submit-btn {
+  flex: 2;
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  border: none;
+  color: white;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px var(--accent-glow);
+  transition: transform var(--transition-snappy), box-shadow var(--transition-snappy), filter var(--transition-snappy);
+}
+
+.note-form-card .submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px var(--accent-glow);
+  filter: brightness(1.05);
+}
+
+.note-form-card .submit-btn:hover .btn-arrow {
+  transform: scale(1.15);
+}
+
+.note-form-card .submit-btn:active {
+  transform: translateY(1px);
+}
+
+.note-form-card .btn-arrow {
+  width: 18px;
+  height: 18px;
+  transition: transform var(--transition-snappy);
+}
+
+/* Error States */
+.input-group.invalid input,
+.input-group.invalid textarea {
+  border-color: var(--error);
+  background-color: var(--error-bg);
+}
+
+.input-group.invalid .floating-label {
+  color: var(--error);
+}
+
+.error-msg {
+  font-size: 0.78rem;
+  color: var(--error);
+  margin-top: 4px;
+  margin-left: 4px;
+  min-height: 16px;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity var(--transition-snappy), transform var(--transition-snappy);
+}
+
+.input-group.invalid .error-msg {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ----------------------------------------------------
+   8. NOTES DISPLAY BOARD GRID
+   ---------------------------------------------------- */
+.board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--glass-border);
+  transition: border-color var(--transition-smooth);
+}
+
+.board-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.4px;
+}
+
+.notes-count {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Responsive Grid setup */
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Individual Note Card Glass design */
+.note-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(15px) saturate(140%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 15px;
+  position: relative;
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth), background-color var(--transition-smooth);
+  animation: note-appear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes note-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Delete dynamic exit scale animation */
+.note-card.removing {
+  animation: note-disappear 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes note-disappear {
+  to {
+    opacity: 0;
+    transform: scale(0.9) translateY(-10px);
+  }
+}
+
+.note-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18), var(--card-glow, 0 0 1px transparent);
+  border-color: var(--card-accent, var(--glass-border));
+}
+
+/* Top Accent Category borders for Cards */
+.note-card.cat-personal {
+  --card-accent: var(--cat-personal);
+  --card-glow: 0 0 15px hsla(265, 85%, 65%, 0.1);
+  border-top: 4px solid var(--cat-personal);
+}
+
+.note-card.cat-work {
+  --card-accent: var(--cat-work);
+  --card-glow: 0 0 15px hsla(195, 90%, 55%, 0.1);
+  border-top: 4px solid var(--cat-work);
+}
+
+.note-card.cat-ideas {
+  --card-accent: var(--cat-ideas);
+  --card-glow: 0 0 15px hsla(150, 75%, 45%, 0.1);
+  border-top: 4px solid var(--cat-ideas);
+}
+
+.note-card.cat-urgent {
+  --card-accent: var(--cat-urgent);
+  --card-glow: 0 0 15px hsla(355, 85%, 60%, 0.1);
+  border-top: 4px solid var(--cat-urgent);
+}
+
+/* Card Subelement Typography */
+.note-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.note-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.note-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-personal { background: var(--cat-personal-bg); color: var(--cat-personal); }
+.badge-work { background: var(--cat-work-bg); color: var(--cat-work); }
+.badge-ideas { background: var(--cat-ideas-bg); color: var(--cat-ideas); }
+.badge-urgent { background: var(--cat-urgent-bg); color: var(--cat-urgent); }
+
+.note-date {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.note-card-title {
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.2px;
+  word-break: break-word;
+}
+
+.note-card-content {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  flex-grow: 1;
+}
+
+/* Interactive Card Controls */
+.note-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 12px;
+  transition: border-color var(--transition-smooth);
+}
+
+.card-action-btn {
+  background: none;
+  border: 1px solid var(--glass-border);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-snappy);
+}
+
+.card-action-btn:hover {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+.card-action-btn.edit-btn:hover {
+  color: var(--accent-primary);
+  border-color: hsla(var(--accent-primary-hsl), 0.5);
+  background-color: hsla(var(--accent-primary-hsl), 0.08);
+}
+
+.card-action-btn.delete-btn:hover {
+  color: var(--error);
+  border-color: hsla(355, 85%, 60%, 0.4);
+  background-color: var(--error-bg);
+}
+
+.card-action-btn i {
+  width: 14px;
+  height: 14px;
+}
+
+/* ----------------------------------------------------
+   9. BOARD EMPTY STATE VISUALS
+   ---------------------------------------------------- */
+.board-empty-state {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 60px 40px;
+  backdrop-filter: blur(15px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  max-width: 500px;
+  margin: 40px auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  animation: empty-state-reveal 0.5s ease-out forwards;
+}
+
+@keyframes empty-state-reveal {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.empty-icon-box {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  animation: empty-bounce 4s infinite ease-in-out;
+}
+
+@keyframes empty-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.empty-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.empty-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.empty-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+/* ----------------------------------------------------
+   10. TOAST NOTIFICATIONS (Shared design)
+   ---------------------------------------------------- */
+.toast-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 12px 32px var(--shadow-color);
+  backdrop-filter: blur(12px);
+  padding: 16px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-primary);
+  min-width: 300px;
+  max-width: 400px;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  animation: toast-entrance 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transition: transform var(--transition-smooth), opacity var(--transition-smooth), border-color var(--transition-smooth);
+}
+
+.toast.removing {
+  animation: toast-exit 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes toast-entrance {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toast-exit {
+  to {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.9);
+  }
+}
+
+.toast::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+}
+
+.toast.toast-success::before { background-color: var(--success); }
+.toast.toast-error::before { background-color: var(--error); }
+.toast.toast-info::before { background-color: var(--accent-primary); }
+
+.toast-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.toast-success .toast-icon { color: var(--success); }
+.toast-error .toast-icon { color: var(--error); }
+.toast-info .toast-icon { color: var(--accent-primary); }
+
+.toast-content {
+  flex-grow: 1;
+}
+
+.toast-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.toast-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-snappy), background-color var(--transition-snappy);
+}
+
+.toast-close:hover {
+  color: var(--text-primary);
+  background-color: hsla(var(--hue), 10%, 50%, 0.1);
+}
+
+.toast-close i {
+  width: 14px;
+  height: 14px;
+}
+
+/* Keyboard navigation accessibility focus rings */
+button:focus-visible, 
+input:focus-visible, 
+textarea:focus-visible, 
+select:focus-visible, 
+a:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 4px;
+}
+
+/* ----------------------------------------------------
+   11. RESPONSIVENESS LAYOUTS
+   ---------------------------------------------------- */
+@media (max-width: 1024px) {
+  .workspace-container {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 25px;
+  }
+  
+  .workspace-sidebar {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
+  }
+}
+
+@media (max-width: 768px) {
+  .workspace-header {
+    padding: 0 20px;
+    height: 70px;
+  }
+  
+  .workspace-sidebar {
+    grid-template-columns: 1fr;
+  }
+  
+  .user-greeting {
+    display: none; /* Hide welcome text to save header space */
+  }
+  
+  .logout-text {
+    display: none; /* Icon-only logout for narrow screens */
+  }
+  
+  .logout-btn {
+    padding: 10px;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    justify-content: center;
+  }
+  
+  .toast-container {
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+  }
+  
+  .toast {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .notes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .category-selector-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -357,17 +357,41 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Execute mock valid submission spinner state
+    // Execute real authentication against localStorage
     const submitBtn = document.getElementById('signInSubmitBtn');
+    const emailInput = document.getElementById('signInEmail').value.trim().toLowerCase();
+    const passwordInput = document.getElementById('signInPassword').value;
+
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const matchedUser = users.find(u => u.email === emailInput && u.password === passwordInput);
+
+    if (!matchedUser) {
+      triggerCardShakeAnimation();
+      showToast({
+        title: 'Authentication Failed',
+        desc: 'Incorrect email address or password.',
+        type: 'error'
+      });
+      return;
+    }
+
     executeMockSubmission(submitBtn, () => {
+      // Save session credentials
+      localStorage.setItem('authenticated', 'true');
+      localStorage.setItem('currentUser', JSON.stringify({ name: matchedUser.name, email: matchedUser.email }));
+
       showToast({
         title: 'Welcome Back!',
-        desc: `Access granted for ${document.getElementById('signInEmail').value}.`,
+        desc: `Access granted for ${matchedUser.name}. Redirecting...`,
         type: 'success'
       });
-      // Optionally reset form
-      signInForm.reset();
-      clearAllValidationErrors();
+
+      // Redirect to the notes dashboard
+      setTimeout(() => {
+        signInForm.reset();
+        clearAllValidationErrors();
+        window.location.href = 'notes.html';
+      }, 1000);
     });
   });
 
@@ -411,9 +435,31 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Execute mock registration
+    // Check if the user already exists in local database
     const submitBtn = document.getElementById('signUpSubmitBtn');
+    const emailInput = document.getElementById('signUpEmail').value.trim().toLowerCase();
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+    if (users.some(u => u.email === emailInput)) {
+      triggerCardShakeAnimation();
+      showToast({
+        title: 'Registration Blocked',
+        desc: 'An account with this email address already exists.',
+        type: 'error'
+      });
+      return;
+    }
+
+    // Execute dynamic registration
     executeMockSubmission(submitBtn, () => {
+      const newUser = {
+        name: document.getElementById('signUpName').value.trim(),
+        email: emailInput,
+        password: document.getElementById('signUpPassword').value
+      };
+      users.push(newUser);
+      localStorage.setItem('users', JSON.stringify(users));
+
       showToast({
         title: 'Account Created',
         desc: 'Your profile has been created successfully. Welcome aboard!',
